@@ -147,16 +147,17 @@ function submit() {
     document.getElementById('res-score').innerText = `${score}/25`;
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // Send result to Google Form
+    // Updated Google Form submission code
     const FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLSebillFGY4kIG9qiWSbDm-cItuLqhKtUzsl-nVu6yd7yUbCLg/formResponse";
     const formData = new URLSearchParams();
-    formData.append('entry.1856738291', document.getElementById('user-name').value);
-    formData.append('entry.947362910', document.getElementById('user-id').value);
-    formData.append('entry.564738291', score);
+    
+    formData.append("entry.1003152390", document.getElementById("user-name").value);
+    formData.append("entry.889924310", document.getElementById("user-id").value);
+    formData.append("entry.1295637506", score);
 
     fetch(FORM_ACTION, {
-        method: 'POST',
-        mode: 'no-cors',
+        method: "POST",
+        mode: "no-cors",
         body: formData
     }).catch(e => console.log('Submission note:', e));
 }
