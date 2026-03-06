@@ -58,17 +58,14 @@ function init() {
     const grid = document.getElementById('dot-grid');
     const cont = document.getElementById('questions-container');
     QUESTIONS.forEach((q, i) => {
-        // Create Navigation Dot
         const dot = document.createElement('div');
         dot.className = "dot-nav"; dot.id = `dot-${i}`; dot.innerText = i+1;
         dot.onclick = () => window.scrollTo({ top: document.getElementById(`q-${i}`).offsetTop - 100, behavior: 'smooth' });
         grid.appendChild(dot);
 
-        // Determine Difficulty Label
         let diff = i < 7 ? "Beginner" : i < 14 ? "Medium" : i < 21 ? "Hard" : "Advanced";
         let color = i < 7 ? "text-green-500" : i < 14 ? "text-yellow-500" : i < 21 ? "text-orange-500" : "text-red-500";
 
-        // Create Question Card
         const card = document.createElement('div');
         card.className = "glass-panel p-6 shadow-lg"; card.id = `q-${i}`;
         card.innerHTML = `
@@ -117,7 +114,6 @@ function submit() {
         const isCorrect = state.answers[i] === q.a;
         if(isCorrect) score++; 
         
-        // Build Analysis Result Cards
         const card = document.createElement('div');
         card.className = `glass-panel p-5 analysis-card ${isCorrect ? 'correct-border' : 'wrong-border'}`;
         card.innerHTML = `
@@ -140,26 +136,35 @@ function submit() {
         analysisCont.appendChild(card);
     });
     
-    // UI Transition to Success Screen
     document.getElementById('quiz-area').classList.add('hide');
     document.getElementById('success-area').classList.remove('hide');
     document.getElementById('res-name').innerText = document.getElementById('user-name').value;
     document.getElementById('res-score').innerText = `${score}/25`;
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // Updated Google Form submission code
+    // UPDATED FORM SUBMISSION
+    // Base URL must end in /formResponse
     const FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLSebillFGY4kIG9qiWSbDm-cItuLqhKtUzsl-nVu6yd7yUbCLg/formResponse";
-    const formData = new URLSearchParams();
     
+    const formData = new URLSearchParams();
     formData.append("entry.1003152390", document.getElementById("user-name").value);
     formData.append("entry.889924310", document.getElementById("user-id").value);
     formData.append("entry.1295637506", score);
 
-    fetch(FORM_ACTION, {
-        method: "POST",
-        mode: "no-cors",
-        body: formData
-    }).catch(e => console.log('Submission note:', e));
+    // Exponential backoff for reliable submission
+    const submitWithRetry = (retries = 0) => {
+        fetch(FORM_ACTION, {
+            method: "POST",
+            mode: "no-cors",
+            body: formData
+        }).catch(e => {
+            if (retries < 5) {
+                setTimeout(() => submitWithRetry(retries + 1), Math.pow(2, retries) * 1000);
+            }
+        });
+    };
+
+    submitWithRetry();
 }
 
 // Tab Switching / Focus Loss Protection
