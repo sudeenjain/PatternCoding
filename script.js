@@ -149,18 +149,23 @@ function submit() {
 
     // Send to Google Form (This fetch will gracefully fail if there's no internet connection)
     const FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLSebillFGY4kIG9qiWSbDm-cItuLqhKtUzsl-nVu6yd7yUbCLg/formResponse";
-    const formData = new URLSearchParams();
-    
-    formData.append('entry.123456789', document.getElementById('user-name').value); // Candidate Name
-    formData.append('entry.987654321', document.getElementById('user-id').value);   // Contact Number
-    formData.append('entry.112233445', score);                                        // Score
-    
-    fetch(FORM_ACTION, { method: 'POST', mode: 'no-cors', body: formData }).catch(() => {});
-}
+
+const formData = new URLSearchParams();
+
+formData.append('entry.1856738291', document.getElementById('user-name').value);
+formData.append('entry.947362910', document.getElementById('user-id').value);
+formData.append('entry.564738291', score);
+
+fetch(FORM_ACTION, {
+    method: 'POST',
+    mode: 'no-cors',
+    body: formData
+});
 
 window.onblur = () => { 
     if(state.running) { 
         document.getElementById('term-screen').classList.remove('hide'); 
         state.running = false; 
     } 
+
 };
