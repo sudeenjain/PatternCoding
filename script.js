@@ -26,7 +26,7 @@ const QUESTIONS = [
     { q: "Advanced: What defines a 'Sierpinski Triangle' pattern?", o: ["Nested Loops", "Fractal/Recursive Logic", "Linear Increments", "Square Rooting"], a: 1 }
 ];
 
-let state = { answers: {}, running: false, time: 1200 };
+let state = { answers: {}, running: false, time: 900 }; // Updated to 900 seconds (15 minutes)
 
 // Start Button Handler
 document.getElementById('start-btn').onclick = () => {
@@ -48,7 +48,10 @@ function startTimer() {
         state.time--;
         let m = Math.floor(state.time/60), s = state.time%60;
         document.getElementById('timer-val').innerText = `${m}:${s<10?'0'+s:s}`;
-        if(state.time <= 300) { document.getElementById('global-timer').style.color = "#ef4444"; }
+        
+        // Change color to red when 3 minutes remain (180 seconds)
+        if(state.time <= 180) { document.getElementById('global-timer').style.color = "#ef4444"; }
+        
         if(state.time <= 0) { clearInterval(timerInterval); submit(); }
     }, 1000);
 }
@@ -143,7 +146,6 @@ function submit() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
     // UPDATED FORM SUBMISSION
-    // Base URL must end in /formResponse
     const FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLSebillFGY4kIG9qiWSbDm-cItuLqhKtUzsl-nVu6yd7yUbCLg/formResponse";
     
     const formData = new URLSearchParams();
@@ -151,7 +153,6 @@ function submit() {
     formData.append("entry.889924310", document.getElementById("user-id").value);
     formData.append("entry.1295637506", score);
 
-    // Exponential backoff for reliable submission
     const submitWithRetry = (retries = 0) => {
         fetch(FORM_ACTION, {
             method: "POST",
