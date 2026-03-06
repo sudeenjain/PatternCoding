@@ -26,9 +26,20 @@ const QUESTIONS = [
     { q: "Advanced: What defines a 'Sierpinski Triangle' pattern?", o: ["Nested Loops", "Fractal/Recursive Logic", "Linear Increments", "Square Rooting"], a: 1 }
 ];
 
-let state = { answers: {}, running: false, time: 900 }; // Updated to 900 seconds (15 minutes)
+let state = { answers: {}, running: false, time: 900 }; // 15 Minutes = 900 Seconds
 
-// Start Button Handler
+// Step 1: Verify Password
+document.getElementById('verify-pass-btn').onclick = () => {
+    const code = document.getElementById('access-code').value;
+    if(code === "2005") {
+        document.getElementById('pass-card').classList.add('hide');
+        document.getElementById('login-card').classList.remove('hide');
+    } else {
+        alert("Incorrect Access Code.");
+    }
+};
+
+// Step 2: Start Quiz
 document.getElementById('start-btn').onclick = () => {
     const name = document.getElementById('user-name').value.trim();
     const id = document.getElementById('user-id').value.trim();
@@ -36,27 +47,34 @@ document.getElementById('start-btn').onclick = () => {
     
     document.getElementById('login-card').classList.add('hide');
     document.getElementById('quiz-area').classList.remove('hide');
+    document.getElementById('global-timer').classList.remove('hide');
     state.running = true;
     init();
     startTimer();
 };
 
-// Timer Logic
 function startTimer() {
     const timerInterval = setInterval(() => {
         if(!state.running) { clearInterval(timerInterval); return; }
         state.time--;
+        
         let m = Math.floor(state.time/60), s = state.time%60;
         document.getElementById('timer-val').innerText = `${m}:${s<10?'0'+s:s}`;
         
-        // Change color to red when 3 minutes remain (180 seconds)
-        if(state.time <= 180) { document.getElementById('global-timer').style.color = "#ef4444"; }
+        // Visual Warning
+        if(state.time <= 180) { // 3 Minutes left
+            document.getElementById('global-timer').style.borderColor = "#ef4444";
+            document.getElementById('global-timer').style.color = "#ef4444";
+        }
         
-        if(state.time <= 0) { clearInterval(timerInterval); submit(); }
+        // Auto Terminate
+        if(state.time <= 0) { 
+            clearInterval(timerInterval); 
+            submit(); 
+        }
     }, 1000);
 }
 
-// Generate Questions and Navigation Grid
 function init() {
     const grid = document.getElementById('dot-grid');
     const cont = document.getElementById('questions-container');
@@ -91,8 +109,8 @@ function init() {
     });
 }
 
-// Option Selection Handler
 window.sel = (qi, oi) => {
+    if(!state.running) return;
     state.answers[qi] = oi;
     document.querySelectorAll(`[id^="opt-${qi}-"]`).forEach(b => b.classList.remove('selected'));
     document.getElementById(`opt-${qi}-${oi}`).classList.add('selected');
@@ -100,18 +118,20 @@ window.sel = (qi, oi) => {
     
     let solved = Object.keys(state.answers).length;
     document.getElementById('progress-text').innerText = `${solved}/25`;
-    if(solved === QUESTIONS.length) {
-        const b = document.getElementById('final-submit');
-        b.disabled = false; b.classList.replace('bg-gray-800', 'bg-blue-600'); b.classList.replace('text-gray-500', 'text-white');
-        b.onclick = submit;
-    }
+    
+    // Enable submit if any question is answered (in case of time pressure)
+    const b = document.getElementById('final-submit');
+    b.disabled = false; 
+    b.classList.replace('bg-gray-800', 'bg-blue-600'); 
+    b.classList.replace('text-gray-500', 'text-white');
+    b.onclick = submit;
 };
 
-// Final Submission Logic
 function submit() {
     state.running = false;
     let score = 0;
     const analysisCont = document.getElementById('analysis-container');
+    analysisCont.innerHTML = ""; // Clear
     
     QUESTIONS.forEach((q, i) => { 
         const isCorrect = state.answers[i] === q.a;
@@ -140,38 +160,33 @@ function submit() {
     });
     
     document.getElementById('quiz-area').classList.add('hide');
+    document.getElementById('global-timer').classList.add('hide');
     document.getElementById('success-area').classList.remove('hide');
     document.getElementById('res-name').innerText = document.getElementById('user-name').value;
     document.getElementById('res-score').innerText = `${score}/25`;
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // UPDATED FORM SUBMISSION
+    // Google Form Submission
     const FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLSebillFGY4kIG9qiWSbDm-cItuLqhKtUzsl-nVu6yd7yUbCLg/formResponse";
-    
     const formData = new URLSearchParams();
-    formData.append("entry.1003152390", document.getElementById("user-name").value);
-    formData.append("entry.889924310", document.getElementById("user-id").value);
-    formData.append("entry.1295637506", score);
+    formData.append('entry.1856738291', document.getElementById('user-name').value);
+    formData.append('entry.947362910', document.getElementById('user-id').value);
+    formData.append('entry.564738291', score);
 
-    const submitWithRetry = (retries = 0) => {
-        fetch(FORM_ACTION, {
-            method: "POST",
-            mode: "no-cors",
-            body: formData
-        }).catch(e => {
-            if (retries < 5) {
-                setTimeout(() => submitWithRetry(retries + 1), Math.pow(2, retries) * 1000);
-            }
-        });
-    };
-
-    submitWithRetry();
+    fetch(FORM_ACTION, { method: 'POST', mode: 'no-cors', body: formData });
 }
 
-// Tab Switching / Focus Loss Protection
+// SECURITY: Tab/Focus protection
 window.onblur = () => { 
     if(state.running) { 
         document.getElementById('term-screen').classList.remove('hide'); 
         state.running = false; 
     } 
+};
+
+// SECURITY: Disable F12, Ctrl+Shift+I, etc.
+document.onkeydown = (e) => {
+    if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) {
+        return false;
+    }
 };
