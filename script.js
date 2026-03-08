@@ -133,13 +133,22 @@ function submit() {
     document.getElementById('res-score').innerText = `${score}/25`;
 
     // SYNC TO GOOGLE FORM
-    const FORM_URL = "https://docs.google.com/forms/d/1qM8Z8cUNuELNq7vL7bTpOn_Gc1QlE-2mHC9rjEke4Uc/formResponse";
+    const FORM_ACTION = "https://docs.google.com/forms/d/1qM8Z8cUNuELNq7vL7bTpOn_Gc1QlE-2mHC9rjEke4Uc/formResponse";
     const formData = new URLSearchParams();
+    
     formData.append('entry.1003152390', document.getElementById('user-name').value);
     formData.append('entry.889924310', document.getElementById('user-id').value);
     formData.append('entry.1295637506', score);
 
-    fetch(FORM_URL, { method: 'POST', mode: 'no-cors', body: formData });
+    fetch(FORM_ACTION, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: formData
+    }).then(() => {
+        console.log("Results synced to Google Form successfully.");
+    }).catch((err) => {
+        console.error("Form submission failed:", err);
+    });
 };
 
 // Password Protection Logic
