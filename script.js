@@ -1,45 +1,40 @@
 const QUESTIONS = [
-    { q: "What is the simplest nested loop structure to print a 5x5 square of stars?", o: ["1 Loop", "2 Nested Loops", "3 Nested Loops", "While inside If"], a: 1 },
-    { q: "To print a Right Angled Triangle, what should be the limit of the inner loop 'j' if 'i' is the row index?", o: ["j < n", "j <= i", "j > i", "j = 0"], a: 1 },
-    { q: "Identify this pattern's type:", p: "*****\n*****\n*****", o: ["Square", "Rectangle", "Rhombus", "Triangle"], a: 1 },
-    { q: "Which character is commonly used as a placeholder for spaces in pattern logic design?", o: ["*", "#", "_ or Space", "$"], a: 2 },
-    { q: "What is the result of 'print(\"*\" * 3)' in Python?", o: ["*", "***", "*\n*\n*", "3"], a: 1 },
-    { q: "Next row logic for: \n1\n1 2\n1 2 3", o: ["Print i", "Print j", "Print n", "Print constant 1"], a: 1 },
-    { q: "What loop variable usually controls the number of rows?", o: ["Inner loop", "Outer loop", "Global variable", "None"], a: 1 },
-    { q: "Which formula calculates the number of stars in the i-th row of a centered Pyramid (1, 3, 5...)?", o: ["i + 1", "2*i + 1", "2*i - 1", "i * 2"], a: 2 },
-    { q: "In an inverted triangle (n to 1), the outer loop starts from 'n'. What is the condition?", o: ["i > 0", "i < n", "i == 0", "i++"], a: 0 },
-    { q: "Logic for Floyd's Triangle involves which variable behavior?", o: ["Resetting 'j' to 0", "A continuous incrementing 'count'", "Printing row index", "Multiplying i and j"], a: 1 },
-    { q: "Identify the pattern:", p: "1\n2 3\n4 5 6", o: ["Pascal's Triangle", "Floyd's Triangle", "Fibonacci Grid", "Binary Triangle"], a: 1 },
-    { q: "To print spaces before stars in a pyramid, the space loop usually runs from 1 to:", o: ["i", "n - i", "n + i", "2 * i"], a: 1 },
-    { q: "What logic produces this binary pattern?", p: "1\n0 1\n1 0 1", o: ["i % 2", "j % 2", "(i + j) % 2 == 0", "Random"], a: 2 },
-    { q: "For a Square of size 'n', how many total iterations occur in a nested loop?", o: ["n", "2n", "n^2", "n/2"], a: 2 },
-    { q: "Condition to print stars only on the boundaries of a Square (Hollow Square)?", o: ["i==1 || j==1", "i==1 || i==n || j==1 || j==n", "i==j", "i+j == n"], a: 1 },
-    { q: "What logic is used for a Diamond pattern?", o: ["Two nested loops", "Pyramid + Inverted Pyramid", "One single loop", "Square - Triangle"], a: 1 },
-    { q: "In a Pascal Triangle, the value at a position is the sum of:", o: ["Previous row elements", "Two elements directly above", "i and j", "Factorials only"], a: 1 },
-    { q: "What is the logic for a Rhombus pattern rows?", o: ["Only Stars", "Spaces + Stars", "Stars + Spaces", "None"], a: 1 },
-    { q: "Identify the complexity of a 3D Cube pattern (n x n x n)?", o: ["O(n)", "O(n^2)", "O(n^3)", "O(log n)"], a: 2 },
-    { q: "To print a 'Z' shape pattern, which conditions are needed?", o: ["i==1, i==n, i+j==n+1", "i==j", "j==1, j==n", "All of above"], a: 0 },
-    { q: "What is the middle row index of a pattern with '2n-1' rows?", o: ["n-1", "n", "n+1", "2n"], a: 1 },
-    { q: "Which mathematical concept is most related to the Butterfly pattern symmetry?", o: ["Rotation", "Reflection/Mirroring", "Translation", "None"], a: 1 },
-    { q: "In a Spiral Matrix pattern, how many directions are tracked?", o: ["2", "3", "4", "8"], a: 2 },
-    { q: "What logic handles the 'X' pattern (both diagonals)?", o: ["i == j || i+j == n+1", "i == j && i+j == n", "i > j", "i < j"], a: 0 },
-    { q: "Advanced: What defines a 'Sierpinski Triangle' pattern?", o: ["Nested Loops", "Fractal/Recursive Logic", "Linear Increments", "Square Rooting"], a: 1 }
+    // BEGINNER (1-7)
+    { q: "What is the simplest nested loop structure to print a 5x5 square of stars?", o: ["1 Loop", "2 Nested Loops", "3 Nested Loops", "While inside If"], a: 1, exp: "A 2D pattern requires one outer loop to iterate through the rows, and one inner loop to iterate through the columns in each row." },
+    { q: "To print a Right Angled Triangle, what should be the limit of the inner loop 'j' if 'i' is the row index?", o: ["j < n", "j <= i", "j > i", "j = 0"], a: 1, exp: "In a right-angled triangle, the number of elements in a row equals the current row number. Therefore, the inner loop 'j' must run until it is equal to 'i'." },
+    { q: "Identify this pattern's type:", p: "*****\n*****\n*****", o: ["Square", "Rectangle", "Rhombus", "Triangle"], a: 1, exp: "The pattern has 3 rows and 5 columns. Since the number of rows does not equal the number of columns, it forms a rectangle, not a square." },
+    { q: "Which character is commonly used as a placeholder for spaces in pattern logic design?", o: ["*", "#", "_ or Space", "$"], a: 2, exp: "Spaces (' ') or underscores ('_') are typically used to push stars to the right side or to form hollow structures in terminal output." },
+    { q: "What is the result of 'print(\"*\" * 3)' in Python?", o: ["*", "***", "*\n*\n*", "3"], a: 1, exp: "In Python, multiplying a string by an integer concatenates that string to itself multiple times on the same line. Hence, it outputs '***'." },
+    { q: "Next row logic for: \n1\n1 2\n1 2 3", o: ["Print i", "Print j", "Print n", "Print constant 1"], a: 1, exp: "In each row, the numbers increment from 1 up to the current row number. Printing the inner loop variable 'j' achieves this." },
+    { q: "What loop variable usually controls the number of rows?", o: ["Inner loop", "Outer loop", "Global variable", "None"], a: 1, exp: "The outer loop determines how many times a new line is printed (the height), thus controlling the rows." },
+
+    // MEDIUM (8-14)
+    { q: "Which formula calculates the number of stars in the i-th row of a centered Pyramid (1, 3, 5...)?", o: ["i + 1", "2*i + 1", "2*i - 1", "i * 2"], a: 2, exp: "A centered pyramid has an odd number of stars per row. If i starts at 1, '2*i - 1' gives 1, 3, 5... stars respectively." },
+    { q: "In an inverted triangle (n to 1), the outer loop starts from 'n'. What is the condition?", o: ["i > 0", "i < n", "i == 0", "i++"], a: 0, exp: "Since you start at 'n' and decrement to 1, the loop condition must keep running as long as 'i > 0' (or 'i >= 1')." },
+    { q: "Logic for Floyd's Triangle involves which variable behavior?", o: ["Resetting 'j' to 0", "A continuous incrementing 'count'", "Printing row index", "Multiplying i and j"], a: 1, exp: "Floyd's triangle prints consecutive natural numbers (1, 2, 3, 4, 5...). This is done using a separate counter variable that increments continuously and never resets." },
+    { q: "Identify the pattern:", p: "1\n2 3\n4 5 6", o: ["Pascal's Triangle", "Floyd's Triangle", "Fibonacci Grid", "Binary Triangle"], a: 1, exp: "This is Floyd's Triangle, characterized by consecutive natural numbers filled into a right-angled triangle structure." },
+    { q: "To print spaces before stars in a pyramid, the space loop usually runs from 1 to:", o: ["i", "n - i", "n + i", "2 * i"], a: 1, exp: "As the row number 'i' increases, the number of spaces decreases. Running the space loop up to 'n - i' achieves this perfect sloping effect." },
+    { q: "What logic produces this binary pattern?", p: "1\n0 1\n1 0 1", o: ["i % 2", "j % 2", "(i + j) % 2 == 0", "Random"], a: 2, exp: "When the sum of the row index (i) and column index (j) is even, it prints 1. When the sum is odd, it prints 0. This creates a checkerboard binary effect." },
+    { q: "For a Square of size 'n', how many total iterations occur in a nested loop?", o: ["n", "2n", "n^2", "n/2"], a: 2, exp: "The outer loop runs 'n' times, and for every outer loop iteration, the inner loop runs 'n' times. n * n equals n^2 total iterations." },
+
+    // HARD (15-21)
+    { q: "Condition to print stars only on the boundaries of a Square (Hollow Square)?", o: ["i==1 || j==1", "i==1 || i==n || j==1 || j==n", "i==j", "i+j == n"], a: 1, exp: "You print a star if it is the first row (i==1), the last row (i==n), the first column (j==1), or the last column (j==n). Otherwise, print space." },
+    { q: "What logic is used for a Diamond pattern?", o: ["Two nested loops", "Pyramid + Inverted Pyramid", "One single loop", "Square - Triangle"], a: 1, exp: "A Diamond is created by chaining two loops: one loop sequence that prints a normal centered pyramid, followed immediately by an inverted centered pyramid loop sequence." },
+    { q: "In a Pascal Triangle, the value at a position is the sum of:", o: ["Previous row elements", "Two elements directly above", "i and j", "Factorials only"], a: 1, exp: "In Pascal's Triangle, each number is the sum of the two numbers directly above it from the previous row." },
+    { q: "What is the logic for a Rhombus pattern rows?", o: ["Only Stars", "Spaces + Stars", "Stars + Spaces", "None"], a: 1, exp: "A rhombus shifts each row consistently. This is achieved by printing leading spaces (which vary per row) followed by a constant number of stars." },
+    { q: "Identify the complexity of a 3D Cube pattern (n x n x n)?", o: ["O(n)", "O(n^2)", "O(n^3)", "O(log n)"], a: 2, exp: "A 3D pattern requires three levels of nested loops (width, height, depth). Therefore, it scales cubically, resulting in O(n^3) time complexity." },
+    { q: "To print a 'Z' shape pattern, which conditions are needed?", o: ["i==1, i==n, i+j==n+1", "i==j", "j==1, j==n", "All of above"], a: 0, exp: "A 'Z' prints stars on the top row (i==1), bottom row (i==n), and across the anti-diagonal where the sum of indices equals n+1 (i+j==n+1)." },
+    { q: "What is the middle row index of a pattern with '2n-1' rows?", o: ["n-1", "n", "n+1", "2n"], a: 1, exp: "If the total rows are 2n-1 (e.g., n=3 implies 5 rows), the exact middle row is the n-th row (row 3)." },
+
+    // ADVANCED (22-25)
+    { q: "Which mathematical concept is most related to the Butterfly pattern symmetry?", o: ["Rotation", "Reflection/Mirroring", "Translation", "None"], a: 1, exp: "A Butterfly pattern is mirrored both vertically and horizontally. It relies heavily on reflectional symmetry logic in the loops." },
+    { q: "In a Spiral Matrix pattern, how many directions are tracked?", o: ["2", "3", "4", "8"], a: 2, exp: "A spiral matrix traverses four distinct directions in a loop: Right, Down, Left, and Up." },
+    { q: "What logic handles the 'X' pattern (both diagonals)?", o: ["i == j || i+j == n+1", "i == j && i+j == n", "i > j", "i < j"], a: 0, exp: "An 'X' is formed by the main diagonal (where row index equals column index: i == j) and the anti-diagonal (i+j == n+1)." },
+    { q: "Advanced: What defines a 'Sierpinski Triangle' pattern?", o: ["Nested Loops", "Fractal/Recursive Logic", "Linear Increments", "Square Rooting"], a: 1, exp: "The Sierpinski Triangle is a fractal. While it can be approximated with bitwise operators in nested loops, it fundamentally represents recursive/fractal geometric logic." }
 ];
 
-let state = { answers: {}, running: false, time: 900 }; // 15 Minutes = 900 Seconds
+let state = { answers: {}, running: false, time: 1200 };
 
-// Step 1: Verify Password
-document.getElementById('verify-pass-btn').onclick = () => {
-    const code = document.getElementById('access-code').value;
-    if(code === "2005") {
-        document.getElementById('pass-card').classList.add('hide');
-        document.getElementById('login-card').classList.remove('hide');
-    } else {
-        alert("Incorrect Access Code.");
-    }
-};
-
-// Step 2: Start Quiz
 document.getElementById('start-btn').onclick = () => {
     const name = document.getElementById('user-name').value.trim();
     const id = document.getElementById('user-id').value.trim();
@@ -50,28 +45,17 @@ document.getElementById('start-btn').onclick = () => {
     document.getElementById('global-timer').classList.remove('hide');
     state.running = true;
     init();
-    startTimer();
+    timer();
 };
 
-function startTimer() {
+function timer() {
     const timerInterval = setInterval(() => {
         if(!state.running) { clearInterval(timerInterval); return; }
         state.time--;
-        
         let m = Math.floor(state.time/60), s = state.time%60;
         document.getElementById('timer-val').innerText = `${m}:${s<10?'0'+s:s}`;
-        
-        // Visual Warning
-        if(state.time <= 180) { // 3 Minutes left
-            document.getElementById('global-timer').style.borderColor = "#ef4444";
-            document.getElementById('global-timer').style.color = "#ef4444";
-        }
-        
-        // Auto Terminate
-        if(state.time <= 0) { 
-            clearInterval(timerInterval); 
-            submit(); 
-        }
+        if(state.time <= 300) { document.getElementById('global-timer').style.borderColor = "#ef4444"; }
+        if(state.time <= 0) { clearInterval(timerInterval); submit(); }
     }, 1000);
 }
 
@@ -110,7 +94,6 @@ function init() {
 }
 
 window.sel = (qi, oi) => {
-    if(!state.running) return;
     state.answers[qi] = oi;
     document.querySelectorAll(`[id^="opt-${qi}-"]`).forEach(b => b.classList.remove('selected'));
     document.getElementById(`opt-${qi}-${oi}`).classList.add('selected');
@@ -118,25 +101,23 @@ window.sel = (qi, oi) => {
     
     let solved = Object.keys(state.answers).length;
     document.getElementById('progress-text').innerText = `${solved}/25`;
-    
-    // Enable submit if any question is answered (in case of time pressure)
-    const b = document.getElementById('final-submit');
-    b.disabled = false; 
-    b.classList.replace('bg-gray-800', 'bg-blue-600'); 
-    b.classList.replace('text-gray-500', 'text-white');
-    b.onclick = submit;
+    if(solved === QUESTIONS.length) {
+        const b = document.getElementById('final-submit');
+        b.disabled = false; b.classList.replace('bg-gray-800', 'bg-blue-600'); b.classList.replace('text-gray-500', 'text-white');
+        b.onclick = submit;
+    }
 };
 
 function submit() {
     state.running = false;
     let score = 0;
     const analysisCont = document.getElementById('analysis-container');
-    analysisCont.innerHTML = ""; // Clear
     
     QUESTIONS.forEach((q, i) => { 
         const isCorrect = state.answers[i] === q.a;
         if(isCorrect) score++; 
         
+        // Build Analysis Cards With Explanations Included
         const card = document.createElement('div');
         card.className = `glass-panel p-5 analysis-card ${isCorrect ? 'correct-border' : 'wrong-border'}`;
         card.innerHTML = `
@@ -145,7 +126,7 @@ function submit() {
                 <span class="text-xs font-black ${isCorrect ? 'text-green-500' : 'text-red-500'}">${isCorrect ? 'CORRECT' : 'INCORRECT'}</span>
             </div>
             <p class="text-white font-medium mb-3">${q.q}</p>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm mb-4">
                 <div class="p-2 rounded bg-red-900/10 border border-red-900/20">
                     <span class="text-gray-500 block text-[10px] font-bold uppercase">Your Answer</span>
                     <span class="${isCorrect ? 'text-green-400' : 'text-red-400'}">${q.o[state.answers[i]] || 'Not Answered'}</span>
@@ -154,6 +135,10 @@ function submit() {
                     <span class="text-gray-500 block text-[10px] font-bold uppercase">Correct Option</span>
                     <span class="text-green-400">${q.o[q.a]}</span>
                 </div>
+            </div>
+            <div class="exp-box">
+                <span class="block text-[10px] font-bold text-blue-400 uppercase tracking-widest mb-1">Explanation</span>
+                <span class="text-gray-300 text-sm">${q.exp}</span>
             </div>
         `;
         analysisCont.appendChild(card);
@@ -166,29 +151,38 @@ function submit() {
     document.getElementById('res-score').innerText = `${score}/25`;
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // Updated Google Form Submission Logic
-    const FORM_ACTION = "https://docs.google.com/forms/d/1qM8Z8cUNuELNq7vL7bTpOn_Gc1QlE-2mHC9rjEke4Uc/formResponse";
+    // Send result to Google Form
+    const FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLSebillFGY4kIG9qiWSbDm-cItuLqhKtUzsl-nVu6yd7yUbCLg/formResponse";
+
     const formData = new URLSearchParams();
+    formData.append('entry.1856738291', document.getElementById('user-name').value);
+    formData.append('entry.947362910', document.getElementById('user-id').value);
+    formData.append('entry.564738291', score);
+
+    fetch(FORM_ACTION, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: formData
+    });
+};
+
+// Password Unlock Logic
+document.getElementById('unlock-answers-btn').onclick = () => {
+    const pwdInput = document.getElementById('answer-pwd').value;
+    const errorMsg = document.getElementById('pwd-error');
     
-    // Updated entry parameters mapped from the new HTML
-    formData.append('entry.1003152390', document.getElementById('user-name').value);
-    formData.append('entry.889924310', document.getElementById('user-id').value);
-    formData.append('entry.1295637506', score);
+    if (pwdInput === "2000") {
+        document.getElementById('auth-section').classList.add('hide');
+        document.getElementById('analysis-section').classList.remove('hide');
+        errorMsg.classList.add('hide');
+    } else {
+        errorMsg.classList.remove('hide');
+    }
+};
 
-    fetch(FORM_ACTION, { method: 'POST', mode: 'no-cors', body: formData });
-}
-
-// SECURITY: Tab/Focus protection
 window.onblur = () => { 
     if(state.running) { 
         document.getElementById('term-screen').classList.remove('hide'); 
         state.running = false; 
     } 
-};
-
-// SECURITY: Disable F12, Ctrl+Shift+I, etc.
-document.onkeydown = (e) => {
-    if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) {
-        return false;
-    }
 };
